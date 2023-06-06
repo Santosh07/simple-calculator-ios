@@ -43,7 +43,7 @@ class CalculatorBrain {
         }
     }
     
-    func calc() throws -> Float  {
+    func calc() throws -> Int  {
         guard !userInput.isEmpty else {
             throw CalculatorException.inputIsEmpty
         }
@@ -53,17 +53,23 @@ class CalculatorBrain {
             throw CalculatorException.invalidSyntax
         }
         
-        var result: Float = 0
-        var lastOperator: String? = nil
+        var result: Int = 0
+        var calcOperator: String? = nil
         for item in userInput {
             switch item {
             case "0"..."9":
-                if lastOperator == nil {
-                    result = Float(String(item))!
+                if calcOperator == nil {
+                    result = Int(String(item))!
                     continue
                 }
-                let operand: Float = Float(String(item))!
-                switch lastOperator {
+                let operand = Int(String(item))!
+                
+                if calcOperator == "/" && operand == 0 {
+                    clear()
+                    throw CalculatorException.divisionByZero
+                }
+                
+                switch calcOperator {
                 case "+":
                     result += operand
                 case "-":
@@ -76,9 +82,9 @@ class CalculatorBrain {
                     print("TODO")
                 }
             case "+", "-", "/", "*":
-                lastOperator = item
+                calcOperator = item
             default:
-                print("TODO")
+                print("Should not happen.")
             }
         }
         
@@ -111,4 +117,5 @@ enum CalculatorException: Error {
     case operatorAfterOperator
     case invalidCharacter
     case invalidSyntax
+    case divisionByZero
 }

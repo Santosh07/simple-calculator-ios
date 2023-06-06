@@ -46,6 +46,9 @@ class ViewController: UIViewController {
                 errorLabel.text = "Invalid Charapter."
             } catch CalculatorException.invalidSyntax {
                 errorLabel.text = "Invalid Syntax"
+            } catch CalculatorException.divisionByZero {
+                errorLabel.text = "Cannot divide by zero"
+                clearInput = true
             } catch {
                 errorLabel.text = "Error occurred."
             }
